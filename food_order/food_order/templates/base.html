@@ -12,7 +12,7 @@
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="#">Anique's Food </a>
+      <a class="navbar-brand" href="{% url 'index' %}">Anique's Food </a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -20,19 +20,29 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           
-          {{request.user.username}}
-          {% if not request.user.is_authenticated %}
+          {% if request.user.is_authenticated %}
+          
           <li class="nav-item">
-            <a class="nav-link" href="#">Login</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'signup' %}">Signup</a>
+            <a class="nav-link" href="{% url 'logout' %}">Logout</a>
           </li>
 {% else %}
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'login' %}">Login</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'signup' %}">Signup</a>
+</li>
+          {% endif %}
+
+          
+          {% if request.user.is_superuser %}
           <li class="nav-item">
-            <a class="nav-link" href="#">Logout</a>
+            <a class="nav-link" href="/admin">Admin</a>
           </li>
           {% endif %}
+            
+
+
             
           
           

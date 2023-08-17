@@ -21,4 +21,7 @@ class SignUpForm(forms.Form):
             self.add_error("username","Username already exists.")
         if User.objects.filter(email=email).exists():
             self.add_error("email","Email already exists.")
+
+        if password != confirm_password:
+            self.add_error("password","The Passwords do not match. Please try again.")
         return self.cleaned_data
