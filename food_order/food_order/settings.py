@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "app_authentication",
     "food",
     "widget_tweaks",
+    "phonenumber_field",
 ]
 
 MIDDLEWARE = [

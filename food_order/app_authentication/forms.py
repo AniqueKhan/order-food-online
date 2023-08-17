@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
+from app_authentication.models import UserAccount
 
 class SignUpForm(forms.Form):
     username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), max_length=30, required=True)
@@ -25,3 +26,9 @@ class SignUpForm(forms.Form):
         if password != confirm_password:
             self.add_error("password","The Passwords do not match. Please try again.")
         return self.cleaned_data
+
+
+class EditProfileForm(forms.ModelForm):
+    class Meta:
+        model = UserAccount
+        fields = ['address', 'phone_number', 'profile_picture']

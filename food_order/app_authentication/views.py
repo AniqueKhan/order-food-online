@@ -1,9 +1,7 @@
 from django.shortcuts import render
-
-# Create your views here.
-from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from app_authentication.forms import SignUpForm
+from app_authentication.forms import SignUpForm,EditProfileForm
 from django.contrib.auth.models import User
 from app_authentication.models import UserAccount
 
@@ -33,4 +31,27 @@ def signup(request):
     return render(request, 'app_authentication/signup.html', {'form': form})
 
 
+@login_required
+def profile(request):
+    profile = UserAccount.objects.filter(user=request.user).first()
+    context = {
+        "profile":profile
+    }
+    return render(request,"app_authentication/profile.html",context)
 
+@login_required
+def edit_profile(request):
+    profile = UserAccount.objects.get(user=request.user)
+
+    if request.method == 'POST':
+        form = EditProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')  # Redirect to the profile page after successful update
+    else:
+        form = EditProfileForm(instance=profile)
+
+    context = {
+        'form': form
+    }
+    return render(request, 'app_authentication/edit_profile.html', context)

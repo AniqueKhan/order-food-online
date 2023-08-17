@@ -1,0 +1,36 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      {% if profile.profile_picture %}
+      <img
+        src="{{profile.profile_picture.url}}"
+        alt="Profile Picture"
+        class="rounded-circle img-fluid"
+        style="width: 150px"
+      />
+      {% else %}
+      <img
+        src="{% static 'img/default_profile_picture.png' %}"
+        alt="Profile Picture"
+      />
+      {% endif %}
+
+      <h3 class="mb-3">{{profile.user.username}}</h3>
+      <p class="mb-2"><strong>Email:</strong> {{profile.user.email}}</p>
+      {% if profile.address %}
+      <p class="mb-2"><strong>Address:</strong> {{profile.address}}</p>
+      {% endif %} {% if profile.phone_number %}
+      <p><strong>Phone:</strong> {{profile.phone_number}}</p>
+      {% endif %}
+      <div class="text-center">
+        <a href="{% url 'edit_profile' %}" class="btn btn-outline-primary mt-2"
+          ><i class="fa-solid fa-pen-to-square mr-2"></i>
+
+          Edit Profile</a
+        >
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
