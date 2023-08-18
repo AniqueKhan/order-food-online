@@ -1,5 +1,48 @@
-{% extends 'base.html' %}
-{% block content %}
-    index page
-{% endblock content %}
-    
+{% extends "base.html" %} {% load static %} {% block content %}
+<!-- Hero Section -->
+<section class="hero">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-md-6">
+        <h1 class="hero-title">Order Delicious Food Online</h1>
+        <p class="hero-subtitle">
+          Browse local restaurants, explore mouthwatering dishes, and place your
+          order online.
+        </p>
+        <a href="{% url 'restaurants' %}" class="btn btn-primary mb-2"
+          >Explore Restaurants</a
+        >
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Featured Restaurants Section -->
+<section class="featured-restaurants">
+  <div class="container">
+    <h2 class="section-title">Featured Restaurants</h2>
+    <div class="row">
+      {% for restaurant in featured_restaurants %}
+      <div class="col-md-4 mb-4">
+        <div class="card">
+          <img
+            src="{{ restaurant.image.url }}"
+            alt="{{ restaurant.name }}"
+            class="card-img-top"
+          />
+          <div class="card-body">
+            <h5 class="card-title">{{ restaurant.name }}</h5>
+            <p class="card-text">{{ restaurant.description }}</p>
+            <a
+              href="{% url 'restaurant_detail' restaurant.id %}"
+              class="btn btn-primary"
+              >View Menu</a
+            >
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}
