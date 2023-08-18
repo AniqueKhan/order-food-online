@@ -1,0 +1,63 @@
+{% extends "base.html" %} {% load static %} {% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <h1 class="mt-4">
+        {% if category.image %}
+        <img
+          src="{{ category.image.url }}"
+          alt="{{ category.name }} Image"
+          class="img-fluid category-image"
+          style="width: 100px"
+        />
+        {% else %}
+        <img
+          src="{% static 'img/default.png' %}"
+          alt="{{ category.name }} Image"
+          class="img-fluid category-image"
+          style="width: 100px"
+        />
+        {% endif %} {{ category.name }} Category
+      </h1>
+      <hr />
+
+      {% if dishes %}
+
+      <h2>Dishes in this Category</h2>
+      <ul class="list-unstyled">
+        {% for dish in dishes %}
+        <li class="dish-item">
+          <div class="row">
+            <div class="col-md-4">
+              {% if dish.image %}
+              <img
+                src="{{ dish.image.url }}"
+                alt="{{ dish.name }} Image"
+                class="img-fluid dish-image"
+              />
+              {% else %}<img
+                src="{% static 'img/default.png' %}"
+                alt="{{ dish.name }} Image"
+                class="img-fluid dish-image"
+              />
+              {% endif %}
+            </div>
+            <div class="col-md-8">
+              <h5>{{ dish.name }}</h5>
+              <p><b>Restaurant:</b> {{ dish.get_restaurant }}</p>
+              <p><b>Price:</b> ${{ dish.price }}</p>
+              <p>{{ dish.description }}</p>
+            </div>
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <div class="alert alert-danger" role="alert">
+        No dishes in this category
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

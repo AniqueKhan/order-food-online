@@ -1,0 +1,53 @@
+{% extends "base.html" %} {% load static %} {% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <h1 class="mt-4">{{ restaurant.name }}</h1>
+      <hr />
+      <div class="row">
+        <div class="col-md-4">
+          {% if restaurant.image %}
+          <img
+            src="{{ restaurant.image.url }}"
+            alt="{{ restaurant.name }} Image"
+            class="img-fluid restaurant-image"
+          />
+          {% else %}
+          <img
+            src="{% static 'img/default.png' %}"
+            alt="{{ restaurant.name }} Image"
+            class="img-fluid restaurant-image"
+          />
+          {% endif %}
+        </div>
+        <div class="col-md-8">
+          <p>{{ restaurant.description }}</p>
+          <p>Address: {{ restaurant.address }}</p>
+          <p>Contact Number: {{ restaurant.contact_number }}</p>
+        </div>
+      </div>
+      <h2>Menu</h2>
+      <ul class="list-unstyled">
+        {% for dish in dishes %}
+        <li class="dish-item">
+          <div class="row">
+            <div class="col-md-3">
+              <img
+                src="{{ dish.image.url }}"
+                alt="{{ dish.name }} Image"
+                class="img-fluid dish-image"
+              />
+            </div>
+            <div class="col-md-9">
+              <h5>{{ dish.name }}</h5>
+              <p>{{ dish.description }}</p>
+              <p>Price: ${{ dish.price }}</p>
+            </div>
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}

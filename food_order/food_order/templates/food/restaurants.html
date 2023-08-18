@@ -1,0 +1,45 @@
+{% extends "base.html" %} {% load static %} {% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <h1 class="mt-4">Restaurants</h1>
+      <hr />
+      <div class="row">
+        {% for restaurant in restaurants %}
+        <div class="col-md-4 mb-4">
+          <div class="card">
+            {% if restaurant.image %}
+            <img
+              src="{{restaurant.image.url}}"
+              class="card-img-top"
+              alt="{{ restaurant.name }} Image"
+            />
+            {% else %}
+            <img
+              src="{% static 'img/default.png' %}"
+              class="card-img-top"
+              alt="{{ restaurant.name }} Image"
+            />
+            {% endif %}
+
+            <div class="card-body">
+              <h5 class="card-title">{{ restaurant.name }}</h5>
+              <p class="card-text">{{ restaurant.description }}</p>
+              <p class="card-text">Address: {{ restaurant.address }}</p>
+              <p class="card-text">
+                Contact Number: {{ restaurant.contact_number }}
+              </p>
+              <a
+                href="{% url 'restaurant_detail' restaurant.id %}"
+                class="btn btn-primary"
+                >View Menu</a
+              >
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
