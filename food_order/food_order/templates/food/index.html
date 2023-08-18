@@ -1,21 +1,38 @@
 {% extends "base.html" %} {% load static %} {% block content %}
-<!-- Hero Section -->
-<section class="hero">
+<!-- Sales Section -->
+
+{% if sales %}
+<section class="sales">
   <div class="container">
-    <div class="row align-items-center">
-      <div class="col-md-6">
-        <h1 class="hero-title">Order Delicious Food Online</h1>
-        <p class="hero-subtitle">
-          Browse local restaurants, explore mouthwatering dishes, and place your
-          order online.
-        </p>
-        <a href="{% url 'restaurants' %}" class="btn btn-primary mb-2"
-          >Explore Restaurants</a
-        >
+    <h2 class="section-title mt-2">Special Sales</h2>
+    <div class="text-center">
+      <img src="{% static 'img/sale.png' %}" alt="" />
+    </div>
+    <div class="row">
+      {% for sale in sales %}
+      <div class="col-md-4 mt-2">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">{{ sale.title }}</h5>
+            <p class="card-text">{{ sale.get_truncated_description }}...</p>
+            <p class="card-text">Discount: {{ sale.discount_percentage }}%</p>
+            <p class="card-text">
+              Valid from {{ sale.start_date }} to {{ sale.end_date }}
+            </p>
+            <p class="card-text">
+              <strong>Restaurant:</strong> {{ sale.restaurant.name }}
+            </p>
+            <a href="{% url 'sale_detail' sale.id %}" class="btn btn-primary"
+              >View Details</a
+            >
+          </div>
+        </div>
       </div>
+      {% endfor %}
     </div>
   </div>
 </section>
+{% endif %}
 
 <!-- Featured Restaurants Section -->
 <section class="featured-restaurants">

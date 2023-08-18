@@ -1,0 +1,37 @@
+{% extends "base.html" %} {% load static %} {% block content %}
+<div class="container">
+  <h1>{{ sale.title }}</h1>
+  <p>{{ sale.description }}</p>
+  <p>Discount: {{ sale.discount_percentage }}%</p>
+  <p>Valid from {{ sale.start_date }} to {{ sale.end_date }}</p>
+  <p>Restaurant: {{ sale.restaurant.name }}</p>
+
+  {% if sale.dishes.all %}
+
+  <h2>Dishes on Sale:</h2>
+  <ul>
+    {% for dish in sale.dishes.all %}
+
+    <ul class="list-unstyled">
+      <li class="dish-item">
+        <div class="row">
+          <div class="col-md-3">
+            <img
+              src="{{ dish.image.url }}"
+              alt="{{ dish.name }} Image"
+              class="img-fluid dish-image"
+            />
+          </div>
+          <div class="col-md-9">
+            <h5>{{ dish.name }}</h5>
+            <p>{{ dish.description }}</p>
+            <p>Price: ${{ dish.price }}</p>
+          </div>
+        </div>
+      </li>
+    </ul>
+    {% endfor %}
+  </ul>
+  {% endif %}
+</div>
+{% endblock %}
