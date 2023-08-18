@@ -26,6 +26,34 @@
           <p>Contact Number: {{ restaurant.contact_number }}</p>
         </div>
       </div>
+
+      {% if sales %}
+      <h2 class="mt-2">Sales at {{restaurant.name}}</h2>
+
+      <div class="row">
+        {% for sale in sales %}
+        <div class="col-md-4 mt-2">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">{{ sale.title }}</h5>
+              <p class="card-text">{{ sale.get_truncated_description }}...</p>
+              <p class="card-text">Discount: {{ sale.discount_percentage }}%</p>
+              <p class="card-text">
+                Valid from {{ sale.start_date }} to {{ sale.end_date }}
+              </p>
+              <p class="card-text">
+                <strong>Restaurant:</strong> {{ sale.restaurant.name }}
+              </p>
+              <a href="{% url 'sale_detail' sale.id %}" class="btn btn-primary"
+                >View Details</a
+              >
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %} {% if dishes %}
+
       <h2>Menu</h2>
       <ul class="list-unstyled">
         {% for dish in dishes %}
@@ -47,6 +75,7 @@
         </li>
         {% endfor %}
       </ul>
+      {% endif %}
     </div>
   </div>
 </div>
