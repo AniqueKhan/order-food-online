@@ -36,7 +36,6 @@ def dish_categories(request):
 @login_required
 def restaurants(request):
     restaurants = Restaurant.objects.all()
-    print(restaurants)
     context = {
         "restaurants":restaurants
     }

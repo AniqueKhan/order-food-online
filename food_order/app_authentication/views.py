@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 from app_authentication.forms import SignUpForm,EditProfileForm
 from django.contrib.auth.models import User
 from app_authentication.models import UserAccount
+from cart.models import Cart
 
 def signup(request):
     if request.method == 'POST':
@@ -18,6 +19,9 @@ def signup(request):
 
             user = User.objects.create_user(username=username,email=email,password=password)
             user.save()
+
+            cart = Cart.objects.create(user=user)
+            cart.save()
 
             user_account = UserAccount.objects.create(user=user)
 
