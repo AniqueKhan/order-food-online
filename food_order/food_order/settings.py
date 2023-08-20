@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "food",
     "widget_tweaks",
     "phonenumber_field",
+    "cart"
 ]
 
 MIDDLEWARE = [
