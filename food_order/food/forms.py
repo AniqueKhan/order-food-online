@@ -31,5 +31,14 @@ class SaleForm(forms.ModelForm):
                         "The dish '{}' does not belong to the selected restaurant."
                         .format(dish.name)
                     )
+                
+        # Check for an existing active sale for any of the selected dishes
+        active_sales_for_dishes = Sales.objects.filter(dishes__in=selected_dishes.all(), is_active=True)
+        
+        if self.instance.pk:  # Exclude the current instance if editing
+            active_sales_for_dishes = active_sales_for_dishes.exclude(pk=self.instance.pk)
+        
+        if active_sales_for_dishes.exists():
+            raise ValidationError('An active sale already exists for one of the selected dishes.')
 
         return cleaned_data

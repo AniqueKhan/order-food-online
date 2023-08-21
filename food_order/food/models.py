@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.core.validators import MaxValueValidator
+from decimal import Decimal
 
 class Restaurant(models.Model):
     name = models.CharField(max_length=255)
@@ -32,6 +33,8 @@ class Dish(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     category = models.ForeignKey(DishCategory, on_delete=models.SET_NULL, null=True, blank=True)
     image = models.ImageField(upload_to='dish_images/', null=True, blank=True)
+    on_sale = models.BooleanField(default=False)
+    sale_price = models.DecimalField(max_digits=6,decimal_places=2,null=True,blank=True)
     
     def __str__(self):
         return self.name
@@ -41,6 +44,15 @@ class Dish(models.Model):
 
     def get_restaurant(self):
         return self.restaurant
+    
+    def save(self, *args, **kwargs):
+        sale = Sales.objects.filter(dishes=self,is_active=True).first()
+        if sale:
+            print("getting here")
+            self.on_sale=True
+            self.sale_price = self.price * (1 - Decimal(sale.discount_percentage) / 100)
+            print(self.sale_price)
+        super().save(*args, **kwargs)
 
 class Sales(models.Model):
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
@@ -50,7 +62,7 @@ class Sales(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
     dishes = models.ManyToManyField(Dish, related_name='sales', blank=True)
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title

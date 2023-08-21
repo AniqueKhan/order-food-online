@@ -15,7 +15,18 @@
       {% for cart_item in cart_items %}
       <tr>
         <td>{{ cart_item.dish }}</td>
+
+        {% if cart_item.dish.on_sale %}
+        <td>
+          <span style="text-decoration: line-through"
+            >${{cart_item.dish.price}}</span
+          >
+          ${{cart_item.dish.sale_price}}
+        </td>
+        {% else %}
         <td>${{ cart_item.dish.price }}</td>
+        {% endif %}
+
         <td>
           <form method="post" action="{% url 'update_cart' cart_item.id %}">
             {% csrf_token %}
