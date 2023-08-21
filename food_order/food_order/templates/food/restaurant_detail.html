@@ -67,9 +67,22 @@
               />
             </div>
             <div class="col-md-9">
-              <h5>{{ dish.name }}</h5>
+              <h3>{{ dish.name }}</h3>
               <p>{{ dish.description }}</p>
+
+              {% if dish.on_sale %}
+
+              <h6>
+                Price:
+                <span style="text-decoration: line-through"
+                  >${{dish.price}}</span
+                >
+                ${{dish.sale_price}}
+              </h6>
+              {% else %}
               <p>Price: ${{ dish.price }}</p>
+              {% endif %}
+
               <p>
                 <a
                   href="{% url 'add_to_cart' dish.id %}"

@@ -20,5 +20,5 @@ class CartItem(models.Model):
         return f"{self.quantity} x {self.dish.name} in {self.cart.user.username}'s cart"
 
     def save(self, *args, **kwargs):
-        self.subtotal = self.dish.price * self.quantity
+        self.subtotal = self.dish.sale_price * self.quantity if self.dish.on_sale else self.dish.price * self.quantity
         super().save(*args, **kwargs)
