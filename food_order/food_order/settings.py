@@ -42,8 +42,18 @@ INSTALLED_APPS = [
     "food",
     "widget_tweaks",
     "phonenumber_field",
-    "cart"
+    "cart",
+    'django_coverage',
 ]
+
+COVERAGE = {
+    'omit': [
+        '*/site-packages/*',  # Omit external packages from coverage
+        '*/migrations/*',     # Omit migration files
+        '.manage.py',          # Omit manage.py file
+        '*/tests/*',          # Omit test files
+    ],
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
