@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.core.validators import MaxValueValidator
 from decimal import Decimal
+from django.core.exceptions import ValidationError
 
 class Restaurant(models.Model):
     name = models.CharField(max_length=255)
@@ -13,6 +14,7 @@ class Restaurant(models.Model):
     
     def __str__(self):
         return self.name
+
     
 
 class DishCategory(models.Model):
@@ -48,10 +50,8 @@ class Dish(models.Model):
     def save(self, *args, **kwargs):
         sale = Sales.objects.filter(dishes=self,is_active=True).first()
         if sale:
-            print("getting here")
             self.on_sale=True
             self.sale_price = self.price * (1 - Decimal(sale.discount_percentage) / 100)
-            print(self.sale_price)
         super().save(*args, **kwargs)
 
 class Sales(models.Model):
@@ -66,7 +66,7 @@ class Sales(models.Model):
 
     def __str__(self):
         return self.title
-    
+        
     
     class Meta:
         verbose_name_plural = "Sales"
@@ -76,10 +76,25 @@ class Sales(models.Model):
             return self.description[:80]
         return self.description
     
-    def save(self, *args, **kwargs):
-        today = timezone.now().date()
-        self.is_active = self.start_date <= today <= self.end_date
-        super().save(*args, **kwargs)
+    def clean(self):
+        required_fields = [self.title, self.start_date, self.end_date, self.discount_percentage]
+        if not all(required_fields):
+            raise ValidationError("Title, start date, end date, and discount percentage must all be specified.")
 
     
+    def save(self, *args, **kwargs):
+        self.clean()
+
+        today = timezone.now().date()
+        self.is_active = self.start_date <= today <= self.end_date
+        
+        super().save(*args, **kwargs)
+        
+        if self.is_active:
+            self.dishes.all().update(on_sale=True)
+            for dish in self.dishes.all():
+                dish.sale_price = dish.price * (1-Decimal(self.discount_percentage)/100)
+                dish.save()
+
+
         

@@ -46,15 +46,6 @@ INSTALLED_APPS = [
     'django_coverage',
 ]
 
-COVERAGE = {
-    'omit': [
-        '*/site-packages/*',  # Omit external packages from coverage
-        '*/migrations/*',     # Omit migration files
-        '.manage.py',          # Omit manage.py file
-        '*/tests/*',          # Omit test files
-    ],
-}
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
