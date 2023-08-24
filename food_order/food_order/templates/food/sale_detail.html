@@ -16,12 +16,21 @@
       <li class="dish-item">
         <div class="row">
           <div class="col-md-3">
+            {% if dish.image %}
             <img
               src="{{ dish.image.url }}"
               alt="{{ dish.name }} Image"
               class="img-fluid dish-image"
             />
+            {% else %}
+            <img
+              src="{% static 'img/default.png' %}"
+              alt="{{ dish.name }} Image"
+              class="img-fluid dish-image"
+            />
+            {% endif %}
           </div>
+
           <div class="col-md-9">
             <h5>{{ dish.name }}</h5>
             <p>{{ dish.description }}</p>

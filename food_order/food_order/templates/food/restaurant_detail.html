@@ -59,13 +59,19 @@
         {% for dish in dishes %}
         <li class="dish-item">
           <div class="row">
-            <div class="col-md-3">
-              <img
-                src="{{ dish.image.url }}"
-                alt="{{ dish.name }} Image"
-                class="img-fluid dish-image"
-              />
-            </div>
+            {% if dish.image %}
+            <img
+              src="{{ dish.image.url }}"
+              alt="{{ dish.name }} Image"
+              class="img-fluid dish-image"
+            />
+            {% else %}
+            <img
+              src="{% static 'img/default.png' %}"
+              alt="{{ dish.name }} Image"
+              class="img-fluid dish-image"
+            />
+            {% endif %}
             <div class="col-md-9">
               <h3>{{ dish.name }}</h3>
               <p>{{ dish.description }}</p>
