@@ -55,6 +55,9 @@
             <a class="nav-link" href="{% url 'restaurants' %}">Restaurants</a>
           </li>
           <li class="nav-item">
+            <a class="nav-link" href="{% url 'search' %}">Search</a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" href="{% url 'view_cart' %}"
               >Cart {% if cart_items_count %}
               <span class="badge badge-danger ml-2">{{cart_items_count}}</span>

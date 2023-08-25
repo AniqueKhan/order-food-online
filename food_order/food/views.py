@@ -1,6 +1,7 @@
 from django.shortcuts import render,get_object_or_404
 from django.contrib.auth.decorators import login_required
 from food.models import Restaurant,DishCategory,Dish,Sales
+from django.db.models import Q
 from django.db.models import Count
 # Create your views here.
 @login_required
@@ -44,7 +45,7 @@ def restaurants(request):
 @login_required
 def restaurant_detail(request,restaurant_id):
     restaurant = get_object_or_404(Restaurant,id=restaurant_id)
-    dishes = Dish.objects.filter(restaurant=restaurant)
+    dishes = Dish.objects.filter(restaurant=restaurant,available=True)
     sales = Sales.objects.filter(restaurant=restaurant,is_active=True)
     context = {
         "restaurant": restaurant,
@@ -56,9 +57,33 @@ def restaurant_detail(request,restaurant_id):
 @login_required
 def category_detail(request, category_id):
     category = get_object_or_404(DishCategory, id=category_id)
-    dishes = Dish.objects.filter(category=category)
+    dishes = Dish.objects.filter(category=category,available=True)
     context = {
         "category": category,
         "dishes": dishes
     }
     return render(request, "food/category_detail.html", context)
+
+@login_required
+def search(request):
+    query = request.GET.get("q")
+    if query:
+        # Combine multiple conditions using Q objects
+        restaurants = Restaurant.objects.filter(
+            Q(name__icontains=query) | Q(description__icontains=query) | Q(address__icontains=query)
+        )
+        dishes = Dish.objects.filter(
+            Q(name__icontains=query) | Q(description__icontains=query)
+        )
+        categories = DishCategory.objects.filter(name__icontains=query).annotate(dish_count=Count('dish'))
+    else:
+        restaurants = []
+        dishes = []
+        categories=[]
+
+    context = {       "restaurants":restaurants,
+        "dishes":dishes,
+        "categories":categories,
+    }
+
+    return render(request,"food/search.html",context)

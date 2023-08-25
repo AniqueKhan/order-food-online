@@ -45,8 +45,26 @@
             <div class="col-md-8">
               <h5>{{ dish.name }}</h5>
               <p><b>Restaurant:</b> {{ dish.get_restaurant }}</p>
-              <p><b>Price:</b> ${{ dish.price }}</p>
               <p>{{ dish.description }}</p>
+              {% if dish.on_sale %}
+
+              <h6>
+                <b>Price:</b>
+                <span style="text-decoration: line-through"
+                  >${{dish.price}}</span
+                >
+                ${{dish.sale_price}}
+              </h6>
+              {% else %}
+              <p><b>Price:</b> ${{ dish.price }}</p>
+              {% endif %}
+              <p>
+                <a
+                  href="{% url 'add_to_cart' dish.id %}"
+                  class="btn btn-outline-primary"
+                  >Add to cart</a
+                >
+              </p>
             </div>
           </div>
         </li>

@@ -51,10 +51,9 @@ def remove_from_cart(request, cart_item_id):
     
     if cart_item.cart.user == request.user:
         cart = cart_item.cart
-        dish_price = cart_item.dish.price * cart_item.quantity
         
         # Update the cart's total price
-        cart.total_price -= dish_price
+        cart.total_price -= cart_item.subtotal
         cart.save()
         
         # Delete the cart item

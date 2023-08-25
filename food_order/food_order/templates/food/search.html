@@ -1,0 +1,168 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+<div class="container mt-3">
+  <div class="row">
+    <div class="col-md-8 offset-md-2">
+      <h1 style="text-align: center">Find your ultimate meal!</h1>
+      <form>
+        <div class="input-group mb-2">
+          <input
+            type="search"
+            name="q"
+            value="{{request.GET.q}}"
+            class="form-control rounded"
+            placeholder="Search for categories , restaurants and dishes..."
+            aria-label="Search"
+            aria-describedby="search-addon"
+          />
+          <button class="btn btn-outline-primary ml-2" type="submit">
+            <i class="fa-solid fa-search"></i>Search
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% if restaurants %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <h1 class="mt-4">Restaurants</h1>
+      <hr />
+      <div class="row">
+        {% for restaurant in restaurants %}
+        <div class="col-md-4 mb-4">
+          <div class="card">
+            {% if restaurant.image %}
+            <img
+              src="{{restaurant.image.url}}"
+              class="card-img-top"
+              alt="{{ restaurant.name }} Image"
+            />
+            {% else %}
+            <img
+              src="{% static 'img/default.png' %}"
+              class="card-img-top"
+              alt="{{ restaurant.name }} Image"
+            />
+            {% endif %}
+
+            <div class="card-body">
+              <h5 class="card-title">{{ restaurant.name }}</h5>
+              <p class="card-text">{{ restaurant.description }}</p>
+              <p class="card-text">Address: {{ restaurant.address }}</p>
+              <p class="card-text">
+                Contact Number: {{ restaurant.contact_number }}
+              </p>
+              <a
+                href="{% url 'restaurant_detail' restaurant.id %}"
+                class="btn btn-primary"
+                >View Menu</a
+              >
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %} {% if dishes %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <h1 class="mt-4">Dishes</h1>
+      <hr />
+      <div class="row">
+        {% for dish in dishes %}
+        <div class="col-md-4 mb-4">
+          <div class="card">
+            {% if dish.image %}
+            <img
+              src="{{dish.image.url}}"
+              class="card-img-top"
+              alt="{{ dish.name }} Image"
+            />
+            {% else %}
+            <img
+              src="{% static 'img/default.png' %}"
+              class="card-img-top"
+              alt="{{ dish.name }} Image"
+            />
+            {% endif %}
+
+            <div class="card-body">
+              <h5 class="card-title">{{ dish.name }}</h5>
+              <h6 class="card-title">{{ dish.get_restaurant }}</h6>
+              <p class="card-text">{{ dish.description }}</p>
+
+              {% if dish.on_sale %}
+
+              <h6>
+                Price:
+                <span style="text-decoration: line-through"
+                  >${{dish.price}}</span
+                >
+                ${{dish.sale_price}}
+              </h6>
+              {% else %}
+              <p>Price: ${{ dish.price }}</p>
+              {% endif %}
+
+              <p>
+                <a
+                  href="{% url 'add_to_cart' dish.id %}"
+                  class="btn btn-outline-primary"
+                  >Add to cart</a
+                >
+              </p>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %} {% if categories %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <h1 class="mt-4">Categories</h1>
+      <hr />
+      <div class="row">
+        {% for category in categories %} {% if category.dish_count > 0 %} <
+        <div class="col-md-4 mb-4">
+          <div class="card">
+            {% if category.image %}
+            <img
+              src="{{category.image.url}}"
+              class="card-img-top"
+              alt="Category Image"
+            />
+            {% else %}
+            <img
+              src="{% static 'img/default.png' %}"
+              class="card-img-top"
+              alt="Category Image"
+            />
+            {% endif %}
+
+            <div class="card-body">
+              <h5 class="card-title">{{ category.name }}</h5>
+              <p class="card-text">{{category.description}}</p>
+              <p class="card-text">Dishes: {{ category.dish_count }}</p>
+              <a
+                href="{% url 'category_detail' category.id %}"
+                class="btn btn-primary"
+                >View Dishes</a
+              >
+            </div>
+          </div>
+        </div>
+        {% endif %} {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %} {% endblock content %}

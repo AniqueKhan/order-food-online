@@ -37,6 +37,7 @@ class Dish(models.Model):
     image = models.ImageField(upload_to='dish_images/', null=True, blank=True)
     on_sale = models.BooleanField(default=False)
     sale_price = models.DecimalField(max_digits=6,decimal_places=2,null=True,blank=True)
+    available = models.BooleanField(default=True)
     
     def __str__(self):
         return self.name
