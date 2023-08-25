@@ -23,6 +23,7 @@
       {% endif %} {% if profile.phone_number %}
       <p><strong>Phone:</strong> {{profile.phone_number}}</p>
       {% endif %}
+      <p><strong>Balance:</strong> {{profile.balance}}</p>
       <div class="text-center">
         <a href="{% url 'edit_profile' %}" class="btn btn-outline-primary mt-2"
           ><i class="fa-solid fa-pen-to-square mr-2"></i>

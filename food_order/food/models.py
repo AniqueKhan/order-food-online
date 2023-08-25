@@ -47,6 +47,13 @@ class Dish(models.Model):
     def get_restaurant(self):
         return self.restaurant
     
+    def get_sale(self):
+        if self.on_sale:
+            active_sales = Sales.objects.filter(is_active=True)
+            for sale in active_sales:
+                if self in sale.dishes.all():
+                    return sale
+    
     def save(self, *args, **kwargs):
         sale = Sales.objects.filter(dishes=self,is_active=True).first()
         if sale:

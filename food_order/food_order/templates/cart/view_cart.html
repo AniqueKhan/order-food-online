@@ -57,7 +57,10 @@
   </table>
   <div class="text-right">
     <h4>Total: ${{ cart.total_price|floatformat:2 }}</h4>
+
+    {% if cart_items.count > 0 %}
     <a href="#" class="btn btn-primary">Proceed to Checkout</a>
+    {% endif %}
   </div>
 </div>
 {% endblock %}

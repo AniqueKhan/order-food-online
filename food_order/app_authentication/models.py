@@ -8,6 +8,8 @@ class UserAccount(models.Model):
     profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
     phone_number = PhoneNumberField(blank=True, null=True)
     address = models.CharField(max_length=255,blank=True,null=True)
+    balance = models.FloatField(default=0)
+    last_balance_added = models.DateTimeField(blank=True,null=True)
 
 
     def __str__(self):

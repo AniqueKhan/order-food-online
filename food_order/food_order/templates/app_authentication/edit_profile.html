@@ -26,6 +26,11 @@
               {{ form.phone_number|add_class:'form-control' }}
             </div>
 
+            <div class="form-group">
+              <label for="{{ form.phone_number.id_for_label }}">Balance:</label>
+              {{ form.balance|add_class:'form-control' }}
+            </div>
+
             <!-- Profile Picture Field with Custom Class -->
             <div class="form-group">
               <label for="{{ form.profile_picture.id_for_label }}"

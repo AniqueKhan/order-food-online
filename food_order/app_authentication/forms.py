@@ -1,6 +1,8 @@
 from django import forms
 from django.contrib.auth.models import User
 from app_authentication.models import UserAccount
+from django.utils import timezone
+from datetime import timedelta
 
 class SignUpForm(forms.Form):
     username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), max_length=30, required=True)
@@ -31,4 +33,14 @@ class SignUpForm(forms.Form):
 class EditProfileForm(forms.ModelForm):
     class Meta:
         model = UserAccount
-        fields = ['address', 'phone_number', 'profile_picture']
+        fields = ['address', 'phone_number', 'profile_picture','balance']
+
+    def clean(self):
+        super(EditProfileForm,self).clean()
+        profile = self.instance
+
+        if profile.last_balance_added is not None and (timezone.now() - profile.last_balance_added <= timedelta(days=1)):
+            self.add_error("balance", "You can only update your balance once a day.")
+        else:
+            profile.last_balance_added = timezone.now()
+        return self.cleaned_data

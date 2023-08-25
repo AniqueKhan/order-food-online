@@ -17,6 +17,7 @@ def view_cart(request):
 
 @login_required
 def add_to_cart(request, dish_id):
+    desired_sale = None
     dish = get_object_or_404(Dish, pk=dish_id)
     cart = Cart.objects.filter(user=request.user).first()
 
@@ -28,16 +29,15 @@ def add_to_cart(request, dish_id):
         cart_item.quantity += 1
         cart_item.save()
 
-    # Check for active sales that apply to the dish
-    active_sales = Sales.objects.filter(dishes=dish, is_active=True)
+    desired_sale = dish.get_sale()
     
-    if active_sales.exists():
-        # Convert the discount percentage to Decimal and then calculate the sale price
-        sale = active_sales.first()
-        discount_percentage = Decimal(sale.discount_percentage) / 100
+    if desired_sale:
+        # Convert the discount percentage to Decimal and then calculate the desired_sale price
+        discount_percentage = Decimal(desired_sale.discount_percentage) / 100
         sale_price = dish.price * (1 - discount_percentage)
     else:
         sale_price = dish.price
+
         
     # Update cart total price with the sale price
     cart.total_price += sale_price
@@ -71,13 +71,13 @@ def update_cart(request, cart_item_id):
         new_quantity = int(request.POST.get(str(cart_item_id), 0))
         
         if new_quantity > 0:
+            old_subtotal = cart_item.subtotal  # Store the previous subtotal
             cart_item.quantity = new_quantity
             cart_item.save()
             
-            # Update cart total manually
+            # Update cart total by subtracting the old subtotal and adding the new subtotal
             cart = cart_item.cart
-            cart_items = cart.cartitem_set.all()
-            cart.total_price = sum(item.dish.price * item.quantity for item in cart_items)
+            cart.total_price = cart.total_price - old_subtotal + cart_item.subtotal
             cart.save()
         else:
             cart_item.delete()
