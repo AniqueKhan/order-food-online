@@ -41,9 +41,9 @@ class EditProfileFormTestCase(TestCase):
             'phone_number': '+12125552368',
             # You can create a SimpleUploadedFile for testing the image field
             'profile_picture': SimpleUploadedFile("profile.jpg", b"file_content", content_type="image/jpeg"),
+            "balance":68
         }
         form = EditProfileForm(data=form_data, instance=self.user_account)
-        print(form.errors)
         self.assertTrue(form.is_valid())
 
     def test_invalid_edit_profile_form(self):
@@ -93,3 +93,14 @@ class ViewsTestCase(TestCase):
         response = self.client.get(self.edit_profile_url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'app_authentication/edit_profile.html')
+
+
+class UserAccountModelTestCase(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username='testuser', email='test@example.com', password='testpassword')
+        self.user_account = UserAccount.objects.create(user=self.user)
+        
+
+    def test_user_account_string_representation(self):
+        expected_string = str(self.user_account.user)
+        self.assertEqual(str(self.user_account), expected_string)
